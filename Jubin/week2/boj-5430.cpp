@@ -1,31 +1,40 @@
+#ifndef ONLINE_JUDGE
+#pragma warning(disable:4996)
+#endif
+
 #include <cstdio>
 #include <deque>
 
 using namespace std;
 
+enum
+{
+	MAX = 100001
+};
+
 int main()
 {
 	int T;
 	scanf("%d", &T);
-	
+
 	while (T--)
 	{
 		int N;
-		char p[100001];
-		bool reversed = false;
-		
+		char p[MAX];
+		bool bReversed = false;
+		bool bError = false;
+
 		deque<char> dq;
-		
+
 		scanf("%s", p);
-		
 		scanf("%d", &N);
 		getchar();
-		
+
 		char c;
 		char x = 0;
-		
+
 		while ((c = getchar()) != '\n' && c != EOF)
-		{			
+		{
 			if (c == ',' || c == ']')
 			{
 				if (x > 0)
@@ -40,23 +49,21 @@ int main()
 				x += c - '0';
 			}
 		}
-		
-		
-		
-		if (N == 0)
-		{
-			dq.clear();
-		}
-		
+
 		for (int i = 0; p[i] != '\0'; ++i)
 		{
 			if (p[i] == 'R')
 			{
-				reversed = !reversed;
+				bReversed = !bReversed;
 			}
 			else if (p[i] == 'D')
 			{
-				if (reversed)
+				if (dq.empty())
+				{
+					bError = true;
+					break;
+				}
+				if (bReversed)
 				{
 					dq.pop_back();
 				}
@@ -66,12 +73,23 @@ int main()
 				}
 			}
 		}
-		
-		if (reversed)
+
+		if (bError)
+		{
+			puts("error");
+			continue;
+		}
+
+		putchar('[');
+		if (bReversed)
 		{
 			while (!dq.empty())
 			{
-				printf("%hhd,", dq.back());
+				printf("%hhd", dq.back());
+				if (dq.size() > 1)
+				{
+					putchar(',');
+				}
 				dq.pop_back();
 			}
 		}
@@ -79,15 +97,18 @@ int main()
 		{
 			while (!dq.empty())
 			{
-				printf("%hhd,", dq.front());
+				printf("%hhd", dq.front());
+				if (dq.size() > 1)
+				{
+					putchar(',');
+				}
 				dq.pop_front();
 			}
 		}
-		
+		putchar(']');
+
 		putchar('\n');
 	}
-	
 
-	
 	return 0;
 }
