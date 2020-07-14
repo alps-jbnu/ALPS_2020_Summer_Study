@@ -7,8 +7,8 @@ using namespace std;
 int main()
 {
 	char N;
-	int M;
-	scanf("%hhd%d", &N, &M);
+	char M;
+	scanf("%hhd%hhd", &N, &M);
 	
 	deque<char> dq;
 	for (char n = 1; n <= N; ++n)
@@ -18,7 +18,7 @@ int main()
 	
 	int totalCount = 0;
 	
-	for (int m = 0; m < M; ++m)
+	for (char m = 0; m < M; ++m)
 	{
 		char pick;
 		scanf("%hhd", &pick);
