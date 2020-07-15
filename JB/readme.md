@@ -1,6 +1,6 @@
 # 2020 ALPS Summer study
 ### Written by jongbum
-
+해당 readme 파일은 스터디를 진행하면서 알게된 문법, STL 정보들을 수집하여 복습, 확인하기 위해 작성됨
 # Day 1. (2020.07.08)
 - Visual studio code를 통한 C/C++ 개발 환경 새로 설정
     - 단축키 정보
