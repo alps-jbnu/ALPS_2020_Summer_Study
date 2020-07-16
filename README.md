@@ -1,4 +1,4 @@
-# ALPS_2020_Summer_Study  
+# ALPS_2020_Summer_Study
 
 [슬랙](https://app.slack.com/client/T014D4RNEQM/C014T4VHCKB/user_profile/U015ZV940LX)  
 [BOJ](boj.kr) [Programmers](https://programmers.co.kr/) [Leetcode](https://leetcode.com/)  
