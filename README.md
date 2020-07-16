@@ -22,6 +22,7 @@
 | 날짜 | 주제 | 상 | 중 | 하 |
 |------|-----|----|----|-----|
 | 7/8 | 스택 | [오아시스 재결합](https://www.acmicpc.net/problem/3015) | [탑](https://www.acmicpc.net/problem/2493), [괄호의 값](https://www.acmicpc.net/problem/2504), [천재 수학자 성필](https://www.acmicpc.net/problem/15815) | [균형잡힌 세상](https://www.acmicpc.net/problem/4949), [최소, 최대](https://www.acmicpc.net/problem/10818) |
+| 7/15 | 큐 | [가운데를 말해요](https://www.acmicpc.net/problem/1655) | [좋은 친구](https://www.acmicpc.net/problem/3078), [프린터 큐](https://www.acmicpc.net/problem/1966), [AC](https://www.acmicpc.net/problem/5430) | [회전하는 큐](https://www.acmicpc.net/problem/1021), [덱](https://www.acmicpc.net/problem/10866) |
 
 [숙제1](https://docs.google.com/document/d/1S7tdaAIsUO7eRL0aLghEnbJUKpz8bZPqbodfmdxuQCk/edit#) : 7월 8일~7월 21일  
 

@@ -7,11 +7,11 @@
 
 typedef struct train
 {
-	const char *name;
+	char *name;
 	train_size_t size;
 	const train_color_t *color;
-	const struct train *prev;
-	const struct train *next;
+	struct train *prev;
+	struct train *next;
 	int len;
 } train_t;
 
