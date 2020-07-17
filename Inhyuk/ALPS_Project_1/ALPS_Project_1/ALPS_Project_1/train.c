@@ -66,7 +66,7 @@ int pop_train(train_t* trains, train_t* const target_train)
 	assert(trains != NULL);
 	assert(target_train != NULL);
 
-	//¿¬°áµÇ¾îÀÖ´ÂÁö È®ÀÎ
+	//ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 	train_t* search_train = get_train_head(trains);
 	while (search_train != NULL && search_train != target_train)
 		search_train = search_train->next;
