@@ -47,3 +47,9 @@ vector<string> tokenize_getline(const string& data, const char delimiter = ' ') 
         token = strtok(NULL, "-"); 
     } 
 ```
+- minheap을 구성하는 방법은 `priority_queue<int, vector<int>, greater<int>>`
+- maxheap은 기존의 `priority_queue<int>`로 구현 가능
+- priority_queue의 내부 힙은 이진 트리 구조로 되어있기 때문에 같은 높이에 있는 값 간의 대소는 비교 되지 않음(pop시 일정함은 보장)
+- O(nlogn)만에 모든 경우에서 중간값을 구하는 경우는 minheap과 maxheap을 유지하여 중간값을 기준으로 분할하여 저장
+- 중간값보다 작은 값은 maxheap에, 큰 값은 minheap에 저장한다.
+- 매 삽입시마다 maxheap의 최댓값과 minheap의 최솟값을 비교하여, 최댓값이 최솟값보다 큰 경우 자리를 바꿔준다.
