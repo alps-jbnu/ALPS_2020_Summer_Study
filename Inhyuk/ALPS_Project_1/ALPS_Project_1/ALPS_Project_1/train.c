@@ -11,7 +11,6 @@ train_t* create_train_malloc(const char* const name, const train_size_t size, co
 	new_train->color = color;
 	new_train->prev = NULL;
 	new_train->next = NULL;
-	new_train->len = 1;
 
 	return new_train;
 }
@@ -44,12 +43,6 @@ void merge_train(const train_t* left_trains, const train_t* right_trains)
 	get_train_tail(left_trains)->next = right_head_train;
 	get_train_head(right_trains)->prev = left_tail_train;
 
-	int new_len = left_trains->len + right_trains->len;
-	train_t* train = get_train_head(left_trains);
-	while (train != NULL) {
-		train->len = new_len;
-		train = train->next;
-	}
 }
 
 void interleave_train(train_t* const target_train, const train_t* const new_trains)
@@ -58,7 +51,17 @@ void interleave_train(train_t* const target_train, const train_t* const new_trai
 	assert(new_trains != NULL);
 	assert(target_train != new_trains);
 
-	//TODO
+	train_t* train_head = get_train_head(new_trains);
+	if (target_train->next == NULL) {
+		target_train->next = train_head;
+		train_head->prev = target_train;
+	}
+	else {
+		train_head->next = target_train->next;
+		train_head->prev = target_train;
+		target_train->next->prev = train_head;
+		target_train->next = train_head;
+	}
 }
 
 int pop_train(train_t* trains, train_t* const target_train)
@@ -74,13 +77,6 @@ int pop_train(train_t* trains, train_t* const target_train)
 		return 0;
 
 	train_t* train = get_train_head(trains);
-
-	int new_len = train->len - 1;
-	while (train != NULL) {
-		if (train == target_train) train->len = 1;	
-		else train->len = new_len;
-		train = train->next;
-	}
 	
 	if(target_train->next != NULL) target_train->next->prev = target_train->prev;
 	if(target_train->prev != NULL) target_train->prev->next = target_train->next;
@@ -96,7 +92,5 @@ void retrieve_train_to_box(train_t* const train)
 
 	//free(train->name);
 	free(train->color);
-	free(train->prev);
-	free(train->next);
 	free(train);
 }

@@ -12,7 +12,6 @@ typedef struct train
 	const train_color_t *color;
 	struct train *prev;
 	struct train *next;
-	int len;
 } train_t;
 
 train_t *create_train_malloc(const char *const name, const train_size_t size, const train_color_t *color);

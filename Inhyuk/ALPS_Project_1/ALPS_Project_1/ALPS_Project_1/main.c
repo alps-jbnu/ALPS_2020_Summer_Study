@@ -85,19 +85,19 @@ int main()
     assert(train_jongbum->next == NULL);
     assert(train_younghoon->next == NULL);
 
-    //interleave_train(train_jubin, train_kiwan);
-    //merge_train(train_jongbum, train_kiwan);
-    //merge_train(train_seungwoo, train_jongbum);
-    //assert(train_seungwoo->prev == NULL);
-    //assert(train_seungwoo->next == train_younghoon);
-    //assert(train_younghoon->prev == train_seungwoo);
-    //assert(train_younghoon->next == train_jongbum);
-    //assert(train_jongbum->prev == train_younghoon);
-    //assert(train_jongbum->next == train_jubin);
-    //assert(train_jubin->prev == train_jongbum);
-    //assert(train_jubin->next == train_kiwan);
-    //assert(train_kiwan->prev == train_jubin);
-    //assert(train_kiwan->next == NULL);
+    interleave_train(train_jubin, train_kiwan);
+    merge_train(train_jongbum, train_kiwan);
+    merge_train(train_seungwoo, train_jongbum);
+    assert(train_seungwoo->prev == NULL);
+    assert(train_seungwoo->next == train_younghoon);
+    assert(train_younghoon->prev == train_seungwoo);
+    assert(train_younghoon->next == train_jongbum);
+    assert(train_jongbum->prev == train_younghoon);
+    assert(train_jongbum->next == train_jubin);
+    assert(train_jubin->prev == train_jongbum);
+    assert(train_jubin->next == train_kiwan);
+    assert(train_kiwan->prev == train_jubin);
+    assert(train_kiwan->next == NULL);
 
     retrieve_train_to_box(train_jubin);
     retrieve_train_to_box(train_kiwan);
