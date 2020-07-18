@@ -1,3 +1,3 @@
 # Go Young Hun
 
-*Baekjoon id : dmsgh423
+* Baekjoon id : dmsgh423
