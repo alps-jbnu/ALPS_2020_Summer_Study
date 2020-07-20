@@ -7,7 +7,7 @@ enum
 	MAX_DAY = 1000
 };
 
-bool Compare(std::pair<short, char>& p1, std::pair<short, char>& p2)
+bool Compare(const std::pair<short, char>& p1, const std::pair<short, char>& p2)
 {
 	if (p1.second == p2.second)
 	{
