@@ -2,7 +2,8 @@
 using namespace std;
 deque<int> deq;
 int main() {
-    
+    ios::sync_with_stdio(false);
+    cin.tie(0);
     int N, M, search, ans = 0, cmp = 0;
     cin >> N >> M;
     while((N--))
