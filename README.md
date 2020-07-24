@@ -25,6 +25,6 @@
 | 7/15 | 큐 | [가운데를 말해요](https://www.acmicpc.net/problem/1655) | [좋은 친구](https://www.acmicpc.net/problem/3078), [프린터 큐](https://www.acmicpc.net/problem/1966), [AC](https://www.acmicpc.net/problem/5430) | [회전하는 큐](https://www.acmicpc.net/problem/1021), [덱](https://www.acmicpc.net/problem/10866) |
 | 7/22 | 그리디 | [과제](https://www.acmicpc.net/problem/13904), [저울](https://www.acmicpc.net/problem/2437) | [체육복](https://programmers.co.kr/learn/courses/30/lessons/42862), [강의실 배정](https://www.acmicpc.net/problem/11000) | [캠핑](https://www.acmicpc.net/problem/4796), [거스름돈](https://www.acmicpc.net/problem/5585) |
 
-[숙제1](https://docs.google.com/document/d/1S7tdaAIsUO7eRL0aLghEnbJUKpz8bZPqbodfmdxuQCk/edit#) : 7월 8일~7월 21일  
-[숙제2](https://docs.google.com/document/d/1vFFCBOfaOMzsaDddDEIGZaMoj_B42tD8t6DdUCdrOS0/edit?usp=sharing) : 7월 22일~8월 4일  
+[숙제1](https://docs.google.com/document/d/1S7tdaAIsUO7eRL0aLghEnbJUKpz8bZPqbodfmdxuQCk/edit#) : 7월 8일 ~ 7월 21일  
+[숙제2](https://docs.google.com/document/d/1vFFCBOfaOMzsaDddDEIGZaMoj_B42tD8t6DdUCdrOS0/edit?usp=sharing) : 7월 22일 ~ 8월 4일  
 
