@@ -3,8 +3,8 @@
 namespace rpg_extreme
 {
     Map::Map(const uint8_t width, const uint8_t height, const std::vector<std::string>& mapData)
-        : mWidth(0)
-        , mHeight(0)
+        : mWidth(width)
+        , mHeight(height)
         , mItemBoxCount(0)
         , mMonsterCount(0)
         , mPlayer(nullptr)
@@ -26,23 +26,32 @@ namespace rpg_extreme
                 {
                 case eSymbolType::BLANK:
                     break;
- 
+
                 case eSymbolType::WALL:
+                    Spawn(new Wall(x, y));
                     break;
  
                 case eSymbolType::ITEM_BOX:
+                    mItemBoxCount++;
                     break;
  
                 case eSymbolType::SPIKE_TRAP:
+                    Spawn(new SpikeTrap(x, y));
                     break;
  
                 case eSymbolType::MONSTER:
+                    mMonsterCount++;
                     break;
  
                 case eSymbolType::BOSS_MONSTER:
+                    mMonsterCount++;
+                    mBossMonsterPosX = x;
+                    mBossMonsterPosY = y;
                     break;
  
                 case eSymbolType::PLAYER:
+                    mPlayer = new Player(x, y);
+                    Spawn(mPlayer);
                     break;
                     
                 default:
@@ -80,34 +89,42 @@ namespace rpg_extreme
         return mMonsterCount;
     }
  
-    void Map::Spawn(GameObject* const gameObject)
+    void Map::  Spawn(GameObject* const gameObject)
     {
-        
+        mGameObjects[gameObject->GetY()][gameObject->GetX()].push_back(gameObject);
     }
  
     bool Map::Remove(GameObject* const gameObject) 
     {
-        return false;
+        if(mGameObjects[gameObject->GetY()][gameObject->GetX()].size() == 0)
+            return 0;
+        
+        delete mGameObjects[gameObject->GetY()][gameObject->GetX()][0];
+        mGameObjects[gameObject->GetY()][gameObject->GetX()].pop_back();
+        return 1;
     }
  
     size_t Map::GetGameObjectCount(const int8_t x, const int8_t y) const
     {
-        return 0;
+        return mGameObjects[y][x].size();
     }
  
     GameObject* Map::GetGameObject(const int8_t x, const int8_t y, const uint8_t index) const
     {
-        return nullptr;
+        return mGameObjects[y][x][index];
     }
  
     bool Map::IsPassable(const int8_t x, const int8_t y) const
     {
+        if(x < 0 || x >= mWidth || y < 0 || y >= mHeight || mGameObjects[y][x][0]->GetSymbol() == eSymbolType::WALL) 
+            return false;
+
         return true;
     }
  
     Player* Map::GetPlayer() const
     {
-        return nullptr;
+        return mPlayer;
     }
  
     std::string Map::ToString() const
@@ -118,7 +135,10 @@ namespace rpg_extreme
         {
             for (int x = 0; x < mWidth; ++x)
             {
-                ss << '.';
+                if(GetGameObjectCount(x, y) == 0)
+                    ss << '.';
+                else
+                    ss << GetGameObject(x, y, 0)->GetSymbol();
             }
             ss << '\n';
         }

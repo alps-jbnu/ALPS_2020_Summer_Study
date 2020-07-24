@@ -36,12 +36,11 @@ namespace rpg_extreme
     void Monster::AttackTo(Character* const character)
     {
         Player* player = static_cast<Player*>(character);
-        
     }
  
     void Monster::OnAttacked(GameObject* const gameObject, const int16_t damage)
     {
-        //TODO
+        mHp -= std::max(1, damage - mDefense);
     }
  
     const std::string& Monster::GetName() const
