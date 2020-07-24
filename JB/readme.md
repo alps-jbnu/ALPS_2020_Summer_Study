@@ -53,5 +53,3 @@ vector<string> tokenize_getline(const string& data, const char delimiter = ' ') 
 - O(nlogn)만에 모든 경우에서 중간값을 구하는 경우는 minheap과 maxheap을 유지하여 중간값을 기준으로 분할하여 저장
 - 중간값보다 작은 값은 maxheap에, 큰 값은 minheap에 저장한다.
 - 매 삽입시마다 maxheap의 최댓값과 minheap의 최솟값을 비교하여, 최댓값이 최솟값보다 큰 경우 자리를 바꿔준다.
-
-commit testing
