@@ -59,3 +59,9 @@ vector<string> tokenize_getline(const string& data, const char delimiter = ' ') 
 - contaniner iteration 도중 erase 작업은 Index을 추적하기 어렵게 함
     - 기본적으로 다중 반복문에서는 erase 후 내부 반복문은 `break`해야함
 - real-time 정렬이 필요한 경우 heap, 불필요한 경우 sort 이용
+- [저울 문제](http://boj.kr/2437) 해설
+    - `1` 부터 임의의 수 `w`까지 모든 수를 주어진 추를 통해 만들 수 있다면
+    - 무게가 `k`인 추가 추가되면, `1 ~ w` 와 `k ~ (k + w)` 만들 수 있음
+    - 만약 `k`가 `w + 1 < k`인 경우
+        1. `w`와 `k` 사이의 수는 만들어질 수 없으며
+        1. 이 값이 추로 만들수 없는 최솟값임
