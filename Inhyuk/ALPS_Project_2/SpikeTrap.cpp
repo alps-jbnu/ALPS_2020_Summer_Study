@@ -40,8 +40,12 @@ namespace rpg_extreme
     void SpikeTrap::AttackTo(Character* const character)
     {
         Player* player = static_cast<Player*>(character);
-        if(IsAttackable())
-            if(player->IsAttackedable)
+        bool isDx = player->HasAccessoryEffect(eAccessoryEffectType::DEXTERITY);
+        if(IsAttackable() && player->IsAttackedable()){
+            if(isDx)
+                player->OnAttacked(this, 1);
+            else
                 player->OnAttacked(this, DAMAGE);
+        }
     }
 }
