@@ -7,12 +7,12 @@
 #include <algorithm>
 
 #include "GameObject.h"
-// #include "Player.h"
-// #include "Monster.h"
-// #include "EquipmentBox.h"
-// #include "SpikeTrap.h"
+#include "Player.h"
+#include "Monster.h"
+#include "EquipmentBox.h"
+#include "SpikeTrap.h"
 #include "eSymbolType.h"
-// #include "Wall.h"
+#include "Wall.h"
 namespace rpg_extreme {
     class Map final {
     public:
