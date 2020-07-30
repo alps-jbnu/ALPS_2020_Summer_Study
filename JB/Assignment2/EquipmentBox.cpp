@@ -2,10 +2,10 @@
 
 namespace rpg_extreme{
     EquipmentBox::EquipmentBox(const int8_t x, const int8_t y, Equipment* equipment)
-    : GameObject(0, 0), mEquipment(nullptr) {}
+    : GameObject(x, y), mEquipment(equipment) {}
 
     char EquipmentBox::GetSymbol() const {
-        return ' ';
+        return 'B';
     }
 
     bool EquipmentBox::IsCharacter() const {
@@ -25,6 +25,6 @@ namespace rpg_extreme{
     }
 
     Equipment* EquipmentBox::GetEquipment() {
-        return nullptr;
+        return mEquipment;
     }
 }

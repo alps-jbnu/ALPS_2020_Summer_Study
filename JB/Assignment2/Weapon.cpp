@@ -2,7 +2,7 @@
 
 namespace rpg_extreme{
     Weapon::Weapon(const int16_t attack)
-    :mAttack(0) {
+    :mAttack(attack) {
     }
 
     bool Weapon::IsArmor() const {
@@ -14,10 +14,10 @@ namespace rpg_extreme{
     }
 
     bool Weapon::IsWeapon() const {
-        return false;
+        return true;
     }
 
     int16_t Weapon::GetAttack() const {
-        return 0;
+        return mAttack;
     }
 }

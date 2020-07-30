@@ -5,7 +5,7 @@ namespace rpg_extreme {
     : GameObject(x, y) {}
 
     char SpikeTrap::GetSymbol() const {
-        return ' ';
+        return '^';
     }
 
     bool SpikeTrap::IsCharacter() const {
@@ -30,5 +30,6 @@ namespace rpg_extreme {
 
     void SpikeTrap::AttackTo(Character* const character) {
         Player* player = static_cast<Player*>(character);
+        player->OnAttacked(this, 5);
     }
 }

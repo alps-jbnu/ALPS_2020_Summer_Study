@@ -21,17 +21,17 @@ namespace rpg_extreme
                 {
                     //TODO: 입력
                 case eSymbolType::BLANK:
-                    //objVector.push_back(new GameObject(x, y));
+                    // objVector.push_back(new GameObject(x, y));
                     break;
                 case eSymbolType::WALL:
-                    // objVector.push_back(new Wall())
+                    objVector.push_back(new Wall(x, y));
                     break;
                 case eSymbolType::ITEM_BOX:
-                    // objVector.push_back(new Item())
+                    objVector.push_back(new EquipmentBox(x, y, nullptr));
                     mItemBoxCount++;
                     break;
                 case eSymbolType::SPIKE_TRAP:
-                    // objVector.push_back(new Spike())
+                    objVector.push_back(new SpikeTrap(x, y));
                     break;
                 case eSymbolType::MONSTER:
                     mMonsterCount++;
@@ -41,9 +41,12 @@ namespace rpg_extreme
                     mMonsterCount++;
                     mBossMonsterPosY = y;
                     mBossMonsterPosX = x;
+                    //TODO: BossMonster로 바뀌어야함
+                    objVector.push_back(new Monster(x, y, "", 0, 0, 0, 0));
                     break;
                 case eSymbolType::PLAYER:
-                    objVector.push_back(new Player::Player(x, y));
+                    mPlayer = new Player::Player(x, y);
+                    objVector.push_back(mPlayer);
                     break;
                 default:
                     assert(false);
@@ -79,14 +82,13 @@ namespace rpg_extreme
         //TODO: mGameObjects에 gameObject를 추가합니다.
         if(gameObject->IsCharacter()) {
             switch(gameObject->GetSymbol()) {
+            case eSymbolType::BOSS_MONSTER:
             case eSymbolType::MONSTER:
                 Monster* monster = dynamic_cast<Monster *>(gameObject);
-                if(monster)
+                if(monster) {
                     monster->FillUpHp();
                     mGameObjects[monster->GetY()][monster->GetX()].push_back(monster);
-                break;
-            case eSymbolType::BOSS_MONSTER:
-                //TODO: BOSS MONSTER 정의 후
+                }
                 break;
             case eSymbolType::PLAYER:
                 Player* player = dynamic_cast<Player *>(gameObject);
@@ -104,30 +106,34 @@ namespace rpg_extreme
 
     bool Map::Remove(GameObject* const gameObject) {
         for(auto fitr = mGameObjects.begin(); fitr != mGameObjects.end(); fitr++) {
-            for(auto sitr = (*fitr).begin(); sitr != (*fitr).end(); sitr++) {
-                if()
+            for(auto sitr = fitr->begin(); sitr != fitr->end(); sitr++) {
+                for(auto titr = sitr->begin(); titr != sitr->end(); titr++) {
+                    if(gameObject == *titr)
+                        sitr->erase(titr);
+                }
             }
         }
         return false;
     }
 
     size_t Map::GetGameObjectCount(const int8_t x, const int8_t y) const {
-        return 0;
+        return mItemBoxCount + mMonsterCount + 1;
     }
 
     GameObject* Map::GetGameObject(const int8_t x, const int8_t y, const uint8_t index) const{
-        return nullptr;
+        return mGameObjects[y][x][index];
     }
 
     bool Map::IsPassable(const int8_t x, const int8_t y) const {
         if(x > mWidth || x < 1 || y > mHeight || y < 1) return false;
-        // TODO: 이동하려는 위치가 맵에서 접근이 가능한지 여부 확인 필요(벽인지)
-        // else if ()
+        for(auto itr : mGameObjects[y][x])
+            if(itr->IsWall())
+                return false;
         return true;
     }
 
     Player* Map::GetPlayer() const {
-        return nullptr;
+        return mPlayer;
     }
 
     std::string Map::ToString() const {

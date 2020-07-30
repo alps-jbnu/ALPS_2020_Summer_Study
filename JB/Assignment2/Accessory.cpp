@@ -9,7 +9,7 @@ namespace rpg_extreme{
     }
 
     bool Accessory::IsAccessory() const {
-        return false;
+        return true;
     }
 
     bool Accessory::IsWeapon() const {

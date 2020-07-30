@@ -2,7 +2,7 @@
 
 namespace rpg_extreme{
     Armor::Armor(const int16_t defense)
-    : mDefense(0) {}
+    : mDefense(defense) {}
     
     bool Armor::IsArmor() const {
         return true;
@@ -17,6 +17,6 @@ namespace rpg_extreme{
     }
 
     int16_t Armor::GetDefense() const {
-        return 0;
+        return mDefense;
     }
 }

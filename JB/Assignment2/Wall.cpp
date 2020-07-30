@@ -2,10 +2,10 @@
 
 namespace rpg_extreme{
     Wall::Wall(const int8_t x, const int8_t y)
-    : GameObject(0, 0) {}
+    : GameObject(x, y) {}
 
     char Wall::GetSymbol() const {
-        return ' ';
+        return '#';
     }
 
     bool Wall::IsCharacter() const {
