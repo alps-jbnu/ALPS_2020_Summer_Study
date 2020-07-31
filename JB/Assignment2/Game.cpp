@@ -1,5 +1,5 @@
 #include "Game.h"
-
+#include <cstring>
 namespace rpg_extreme{
     Game* Game::sInstance = nullptr;
 
@@ -46,6 +46,10 @@ namespace rpg_extreme{
 
             --y;
             --x;
+            if(y == mMap->GetBossMonsterPosY() && x == mMap->GetBossMonsterPosX())
+                mMap->Spawn(new BossMonster(x, y, name, attack, defense, maxHp, exp));
+            else
+                mMap->Spawn(new Monster(x, y, name, attack, defense, maxHp, exp));
         }
 
         // Input equipment data
@@ -63,15 +67,33 @@ namespace rpg_extreme{
             case eSymbolType::WEAPON:
                 int attack;
                 std::cin >> attack;
+                mMap->Spawn(new EquipmentBox(x, y, new Weapon(attack)));
                 break;
             case eSymbolType::ARMOR:
                 int defense;
                 std::cin >> defense;
+                mMap->Spawn(new EquipmentBox(x, y, new Armor(defense)));
                 break;
             case eSymbolType::ACCESSORY:
                 char type[3];
                 std::cin >> type;
+                Accessory* accessory;
+                if(!strcmp(type, "HR"))
+                    accessory = new Accessory(eAccessoryEffectType::HP_REGENERATION);
+                else if(!strcmp(type, "RE"))
+                    accessory = new Accessory(eAccessoryEffectType::REINCARNATION);
+                else if(!strcmp(type, "CO"))
+                    accessory = new Accessory(eAccessoryEffectType::COURAGE);
+                else if(!strcmp(type, "EX"))
+                    accessory = new Accessory(eAccessoryEffectType::EXPERIENCE);
+                else if(!strcmp(type, "DX"))
+                    accessory = new Accessory(eAccessoryEffectType::DEXTERITY);
+                else if(!strcmp(type, "HU"))
+                    accessory = new Accessory(eAccessoryEffectType::HUNTER);
+                else if(!strcmp(type, "CU"))
+                    accessory = new Accessory(eAccessoryEffectType::CURSED);
                 break;
+                mMap->Spawn(new EquipmentBox(x, y, accessory));
             default:
                 assert(false);
             }
@@ -82,19 +104,20 @@ namespace rpg_extreme{
         size_t moveCommandSize = moveCommand.length();
         for(mTurnCount = 0; mTurnCount < moveCommandSize; ++mTurnCount) {
             char d = moveCommand[mTurnCount];
-            switch (d)
-            {
+            switch (d) {
             case 'L':
-                /* code */
+                player->MoveLeft();
+                // TODO: 전투 상황 호출
+                // if(mMap->GetGameObjectCount() >= 2)
                 break;
             case 'R':
-
+                player->MoveRight();
                 break;
             case 'U':
-            
+                player->MoveUp();
                 break;
             case 'D':
-
+                player->MoveDown();
                 break;
             default:
                 assert(false);
@@ -118,6 +141,9 @@ namespace rpg_extreme{
 
     void Game::battleWithBossMonster(BossMonster* const bossMonster) {
         Player* player = mMap->GetPlayer();
+        player->AttackTo(bossMonster);
+        player->OnAttacked(bossMonster, bossMonster->GetAttack());
+        if()
     }
 
     void Game::battleWithMonster(Monster* const monster) {

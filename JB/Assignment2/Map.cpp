@@ -19,7 +19,6 @@ namespace rpg_extreme
                 std::vector<GameObject *> objVector;
                 switch (symbol)
                 {
-                    //TODO: 입력
                 case eSymbolType::BLANK:
                     // objVector.push_back(new GameObject(x, y));
                     break;
@@ -27,7 +26,6 @@ namespace rpg_extreme
                     objVector.push_back(new Wall(x, y));
                     break;
                 case eSymbolType::ITEM_BOX:
-                    objVector.push_back(new EquipmentBox(x, y, nullptr));
                     mItemBoxCount++;
                     break;
                 case eSymbolType::SPIKE_TRAP:
@@ -35,14 +33,11 @@ namespace rpg_extreme
                     break;
                 case eSymbolType::MONSTER:
                     mMonsterCount++;
-                    objVector.push_back(new Monster(x, y, "", 0, 0, 0, 0));
                     break;
                 case eSymbolType::BOSS_MONSTER:
                     mMonsterCount++;
                     mBossMonsterPosY = y;
                     mBossMonsterPosX = x;
-                    //TODO: BossMonster로 바뀌어야함
-                    objVector.push_back(new Monster(x, y, "", 0, 0, 0, 0));
                     break;
                 case eSymbolType::PLAYER:
                     mPlayer = new Player::Player(x, y);
@@ -83,6 +78,12 @@ namespace rpg_extreme
         if(gameObject->IsCharacter()) {
             switch(gameObject->GetSymbol()) {
             case eSymbolType::BOSS_MONSTER:
+                BossMonster* bossMonster = dynamic_cast<BossMonster*>(gameObject);
+                if(bossMonster) {
+                    bossMonster->FillUpHp();
+                    mGameObjects[bossMonster->GetY()][bossMonster->GetX()].push_back(bossMonster);
+                }
+                break;
             case eSymbolType::MONSTER:
                 Monster* monster = dynamic_cast<Monster *>(gameObject);
                 if(monster) {
@@ -97,6 +98,11 @@ namespace rpg_extreme
                     mGameObjects[player->GetInitY()][player->GetInitX()].push_back(player);
                 }
                 break;
+            case eSymbolType::ITEM_BOX:
+                EquipmentBox* equipmentBox = dynamic_cast<EquipmentBox*>(gameObject);
+                if(equipmentBox)
+                    mGameObjects[equipmentBox->GetY()][equipmentBox->GetX()].push_back(equipmentBox);
+                break;
             }
         }
         else { // Character가 아닌 case
@@ -105,19 +111,17 @@ namespace rpg_extreme
     }
 
     bool Map::Remove(GameObject* const gameObject) {
-        for(auto fitr = mGameObjects.begin(); fitr != mGameObjects.end(); fitr++) {
-            for(auto sitr = fitr->begin(); sitr != fitr->end(); sitr++) {
-                for(auto titr = sitr->begin(); titr != sitr->end(); titr++) {
-                    if(gameObject == *titr)
-                        sitr->erase(titr);
-                }
+        for(auto itr : mGameObjects[gameObject->GetY()][gameObject->GetX()]) {
+            if(gameObject == itr){
+                mGameObjects[gameObject->GetY()][gameObject->GetX()].erase(itr);
+                return true;
             }
         }
         return false;
     }
 
     size_t Map::GetGameObjectCount(const int8_t x, const int8_t y) const {
-        return mItemBoxCount + mMonsterCount + 1;
+        return mGameObjects[y][x].size();
     }
 
     GameObject* Map::GetGameObject(const int8_t x, const int8_t y, const uint8_t index) const{
@@ -125,7 +129,7 @@ namespace rpg_extreme
     }
 
     bool Map::IsPassable(const int8_t x, const int8_t y) const {
-        if(x > mWidth || x < 1 || y > mHeight || y < 1) return false;
+        if(x >= mWidth || x < 0 || y >= mHeight || y < 0) return false;
         for(auto itr : mGameObjects[y][x])
             if(itr->IsWall())
                 return false;
@@ -141,7 +145,12 @@ namespace rpg_extreme
         
         for(int y = 0; y < mHeight; ++y) {
             for(int x = 0; x < mWidth; ++x) {
-                ss << '.';
+                if(mPlayer->GetX() == x && mPlayer->GetY() == y)
+                    ss << '@';
+                else if(mGameObjects[y][x].empty())
+                    ss << '.';
+                else
+                    ss << mGameObjects[y][x][0]->GetSymbol();
             }
             ss << '\n';
         }
