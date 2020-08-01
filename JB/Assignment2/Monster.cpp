@@ -33,11 +33,7 @@ namespace rpg_extreme{
     }
 
     void Monster::OnAttacked(GameObject* const gameObject, const int16_t damage) {
-        Player *player = static_cast<Player *>(gameObject);
-        if(player->HasAccessoryEffect(eAccessoryEffectType::COURAGE))
-            mHp -= max(1, (damage * 2 - mDefense));
-        else
-            mHp -= max(1, (damage - mDefense));
+        mHp -= max(1, (damage - mDefense));
     }
 
     const std::string& Monster::GetName() const {

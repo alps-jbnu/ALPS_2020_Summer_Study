@@ -98,22 +98,22 @@ namespace rpg_extreme
                     mGameObjects[player->GetInitY()][player->GetInitX()].push_back(player);
                 }
                 break;
-            case eSymbolType::ITEM_BOX:
-                EquipmentBox* equipmentBox = dynamic_cast<EquipmentBox*>(gameObject);
-                if(equipmentBox)
-                    mGameObjects[equipmentBox->GetY()][equipmentBox->GetX()].push_back(equipmentBox);
-                break;
             }
         }
-        else { // Character가 아닌 case
-            assert(false);
+        else if (gameObject->GetSymbol() == eSymbolType::ITEM_BOX) { // Character가 아닌 case
+            EquipmentBox *equipmentBox = dynamic_cast<EquipmentBox *>(gameObject);
+            if (equipmentBox)
+                mGameObjects[equipmentBox->GetY()][equipmentBox->GetX()].push_back(equipmentBox);
         }
+        
     }
 
     bool Map::Remove(GameObject* const gameObject) {
-        for(auto itr : mGameObjects[gameObject->GetY()][gameObject->GetX()]) {
-            if(gameObject == itr){
-                mGameObjects[gameObject->GetY()][gameObject->GetX()].erase(itr);
+        auto& objects = mGameObjects[gameObject->GetY()][gameObject->GetX()];
+        for (auto itr = objects.begin(); itr != objects.end(); itr++)
+        {
+            if(gameObject == *itr){
+                objects.erase(itr);
                 return true;
             }
         }

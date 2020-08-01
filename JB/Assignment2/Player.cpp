@@ -39,7 +39,10 @@ namespace rpg_extreme{
     void Player::AttackTo(Character* const character) {
         if(character->IsMonster()) {
             Monster *monster = static_cast<Monster *>(character);
-            monster->OnAttacked(this, this->GetAttack() + this->GetWeaponAttack());
+            if(mbCourageBuff)
+                monster->OnAttacked(this, (this->GetAttack() + this->GetWeaponAttack()) * 2);
+            else
+                monster->OnAttacked(this, this->GetAttack() + this->GetWeaponAttack());
         }
     }
 
@@ -48,22 +51,12 @@ namespace rpg_extreme{
             this->mHp -= damage;
         else // Monster
             this->mHp -= max(1, damage - this->GetDefense());
-        if (mHp <= 0) {
-            if(HasAccessoryEffect(eAccessoryEffectType::REINCARNATION)) {
-                UnequipReincarnationAccessory();
-                Game::GetInstance().GetMap().Remove(this);
-                MoveTo(mInitX, mInitY);
-            }
-            else {
-                mHp = 0;
-                // TODO: 전투 종료
-            }
-        }
     }
 
     void Player::MoveTo(const int8_t x, const int8_t y) {
         Map& map = Game::GetInstance().GetMap();
         if(map.IsPassable(x, y)) {
+            map.Remove(this);
             map.Spawn(this);
         }
     }
@@ -135,7 +128,7 @@ namespace rpg_extreme{
     }
 
     bool Player::IsAccessoryEquippable(const Accessory* const accessory) const {
-        if(mAccessories.size() + 1 >= Player::ACCESSORY_SLOT_CAPACITY)
+        if(mAccessories.size() < Player::ACCESSORY_SLOT_CAPACITY)
             return false;
         if(HasAccessoryEffect(accessory->GetType()))
             return false;
@@ -151,11 +144,11 @@ namespace rpg_extreme{
     }
 
     void Player::SetCourageBuff() {
-        mbCourageBuff = true;
+        mbCourageBuff = !mbCourageBuff;
     }
 
     void Player::SetHunterBuff() {
-        mbHunterBuff = true;
+        mbHunterBuff = !mbHunterBuff;
     }
 
     uint16_t Player::GetLevel() const {
