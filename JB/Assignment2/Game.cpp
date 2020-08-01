@@ -276,12 +276,10 @@ namespace rpg_extreme{
     void Game::stepOnSpikeTrap(SpikeTrap* const spikeTrap) {
         Player *player = mMap->GetPlayer();
         //TODO: Dexterity 장신구 효과 활성화
-        if(player->HasAccessoryEffect(eAccessoryEffectType::DEXTERITY)) {
+        if(player->HasAccessoryEffect(eAccessoryEffectType::DEXTERITY))
             player->OnAttacked(spikeTrap, 1);
-        }
-        else {
-
-        }
+        else
+            player->OnAttacked(spikeTrap, 5);
     }
 
     std::string Game::GetResultToString() const {
@@ -290,12 +288,12 @@ namespace rpg_extreme{
         Player *player = mMap->GetPlayer();
 
         ss << mMap->ToString();
-        ss << "Passed Turns : " << 0 << '\n';
-        ss << "LV : " << 1 << '\n';
-        ss << "HP : " << 20 << '/' << 20 << '\n';
-        ss << "ATT : " << 5 << '+' << 0 << '\n';
-        ss << "DEF : " << 5 << '+' << 0 << '\n';
-        ss << "EXP : " << 0 << '/' << 0 << '\n';
+        ss << "Passed Turns : " << mTurnCount << '\n';
+        ss << "LV : " << player->GetLevel() << '\n';
+        ss << "HP : " << player->GetHp() << '/' << player->GetMaxHp() << '\n';
+        ss << "ATT : " << player->GetAttack() << '+' << player->GetWeaponAttack() << '\n';
+        ss << "DEF : " << player->GetDefense() << '+' << player->GetArmorDefense() << '\n';
+        ss << "EXP : " << player->GetExp() << '/' << player->GetMaxExp() << '\n';
 
         if(mbGameClear) {
             ss << "YOU WIN!" << '\n';
