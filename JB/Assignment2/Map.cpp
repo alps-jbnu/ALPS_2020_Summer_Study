@@ -40,7 +40,7 @@ namespace rpg_extreme
                     mBossMonsterPosX = x;
                     break;
                 case eSymbolType::PLAYER:
-                    mPlayer = new Player::Player(x, y);
+                    mPlayer = new Player(x, y);
                     objVector.push_back(mPlayer);
                     break;
                 default:
@@ -78,24 +78,28 @@ namespace rpg_extreme
         if(gameObject->IsCharacter()) {
             switch(gameObject->GetSymbol()) {
             case eSymbolType::BOSS_MONSTER:
+            {
                 BossMonster* bossMonster = dynamic_cast<BossMonster*>(gameObject);
-                if(bossMonster) {
+                if (bossMonster) {
                     bossMonster->FillUpHp();
                     mGameObjects[bossMonster->GetY()][bossMonster->GetX()].push_back(bossMonster);
                 }
                 break;
+            }
             case eSymbolType::MONSTER:
-                Monster* monster = dynamic_cast<Monster *>(gameObject);
-                if(monster) {
+            {
+                Monster* monster = dynamic_cast<Monster*>(gameObject);
+                if (monster) {
                     monster->FillUpHp();
                     mGameObjects[monster->GetY()][monster->GetX()].push_back(monster);
                 }
                 break;
+            }
             case eSymbolType::PLAYER:
                 Player* player = dynamic_cast<Player *>(gameObject);
                 if(player) {
-                    player->FillUpHp();
-                    mGameObjects[player->GetInitY()][player->GetInitX()].push_back(player);
+                    //player->FillUpHp();
+                    mGameObjects[player->GetY()][player->GetX()].push_back(player);
                 }
                 break;
             }
@@ -145,7 +149,7 @@ namespace rpg_extreme
         
         for(int y = 0; y < mHeight; ++y) {
             for(int x = 0; x < mWidth; ++x) {
-                if(mPlayer->GetX() == x && mPlayer->GetY() == y)
+                if(mPlayer->GetX() == x && mPlayer->GetY() == y && mPlayer->IsAlive())
                     ss << '@';
                 else if(mGameObjects[y][x].empty())
                     ss << '.';

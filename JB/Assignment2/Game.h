@@ -20,7 +20,7 @@ namespace rpg_extreme{
         static Game& GetInstance();
 
         void Start();
-        void Shudown();
+        void Shutdown();
         Map& GetMap() const;
         std::string GetResultToString() const;
 

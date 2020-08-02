@@ -12,7 +12,7 @@ int main() {
 
     std::cout << game.GetResultToString();
 
-    game.Shudown();
+    game.Shutdown();
 
     return 0;
 }

@@ -39,10 +39,15 @@ namespace rpg_extreme{
     void Player::AttackTo(Character* const character) {
         if(character->IsMonster()) {
             Monster *monster = static_cast<Monster *>(character);
-            if(mbCourageBuff)
-                monster->OnAttacked(this, (this->GetAttack() + this->GetWeaponAttack()) * 2);
+            int16_t weaponAttack = mWeapon ? GetWeaponAttack() : 0;
+            if(mbCourageBuff) {
+                if (mbHunterBuff)
+                    monster->OnAttacked(this, (this->GetAttack() + weaponAttack) * 3);
+                else
+                    monster->OnAttacked(this, (this->GetAttack() + weaponAttack) * 2);
+            }
             else
-                monster->OnAttacked(this, this->GetAttack() + this->GetWeaponAttack());
+                monster->OnAttacked(this, this->GetAttack() + weaponAttack);
         }
     }
 
@@ -50,39 +55,52 @@ namespace rpg_extreme{
         if(gameObject->IsSpikeTrap())
             this->mHp -= damage;
         else // Monster
-            this->mHp -= max(1, damage - this->GetDefense());
+        {
+            int16_t armorDefense = mArmor ? GetArmorDefense() : 0;
+            this->mHp -= max(1, damage - (this->GetDefense() + armorDefense));
+        }
     }
 
     void Player::MoveTo(const int8_t x, const int8_t y) {
         Map& map = Game::GetInstance().GetMap();
         if(map.IsPassable(x, y)) {
             map.Remove(this);
+            this->mX = x;
+            this->mY = y;
             map.Spawn(this);
         }
     }
 
     void Player::MoveLeft() {
         Map& map = Game::GetInstance().GetMap();
+        map.Remove(this);
         if(map.IsPassable(this->GetX()-1, this->GetY()))
             this->mX--;
+        map.Spawn(this);
     }
 
     void Player::MoveRight() {
         Map& map = Game::GetInstance().GetMap();
+        map.Remove(this);
         if(map.IsPassable(this->GetX()+1, this->GetY()))
             this->mX++;
+        map.Spawn(this);
     }
     
     void Player::MoveUp() {
         Map &map = Game::GetInstance().GetMap();
+        map.Remove(this);
         if(map.IsPassable(this->GetX(), this->GetY()-1))
             this->mY--;
+        map.Spawn(this);
     }
 
     void Player::MoveDown() {
         Map &map = Game::GetInstance().GetMap();
+        map.Remove(this);
         if (map.IsPassable(this->GetX(), this->GetY()+1))
             this->mY++;
+        map.Spawn(this);
     }
 
     void Player::AddHp(const int16_t hp) {
@@ -116,7 +134,12 @@ namespace rpg_extreme{
     }
 
     void Player::UnequipReincarnationAccessory() {
-        auto findResult = std::find(mAccessories.begin(), mAccessories.end(), Accessory(eAccessoryEffectType::REINCARNATION));
+        auto findResult = std::find_if(mAccessories.begin(), mAccessories.end(),
+            [](Accessory* item) {
+                if (item == nullptr) return false;
+                return item->GetType() == eAccessoryEffectType::REINCARNATION;
+            }
+        );
         if(findResult != mAccessories.end()) {
             mAccessories.erase(findResult);
         }
@@ -128,7 +151,7 @@ namespace rpg_extreme{
     }
 
     bool Player::IsAccessoryEquippable(const Accessory* const accessory) const {
-        if(mAccessories.size() < Player::ACCESSORY_SLOT_CAPACITY)
+        if(mAccessories.size() >= Player::ACCESSORY_SLOT_CAPACITY)
             return false;
         if(HasAccessoryEffect(accessory->GetType()))
             return false;
@@ -137,7 +160,12 @@ namespace rpg_extreme{
     }
 
     bool Player::HasAccessoryEffect(const eAccessoryEffectType accessoryEffectType) const {
-        auto findResult = std::find(mAccessories.begin(), mAccessories.end(), Accessory(accessoryEffectType));
+        auto findResult = std::find_if(mAccessories.begin(), mAccessories.end(), 
+            [accessoryEffectType](Accessory* item) {
+                if (item == nullptr) return false;
+                return item->GetType() == accessoryEffectType;
+            }
+            );
         if (findResult != mAccessories.end())
             return true;
         return false;
@@ -160,10 +188,12 @@ namespace rpg_extreme{
     }
 
     int16_t Player::GetWeaponAttack() const {
+        if (mWeapon == nullptr) return 0;
         return mWeapon->GetAttack();
     }
 
     int16_t Player::GetArmorDefense() const {
+        if (mArmor == nullptr) return 0;
         return mArmor->GetDefense();
     }
 

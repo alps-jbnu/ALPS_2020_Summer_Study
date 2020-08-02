@@ -75,29 +75,31 @@ namespace rpg_extreme{
                 mMap->Spawn(new EquipmentBox(x, y, new Armor(defense)));
                 break;
             case eSymbolType::ACCESSORY:
+            {
                 char type[3];
                 std::cin >> type;
-                Accessory* accessory;
-                if(!strcmp(type, "HR"))
+                Accessory* accessory = (Accessory*)nullptr;
+                if (!strcmp(type, "HR"))
                     accessory = new Accessory(eAccessoryEffectType::HP_REGENERATION);
-                else if(!strcmp(type, "RE"))
+                else if (!strcmp(type, "RE"))
                     accessory = new Accessory(eAccessoryEffectType::REINCARNATION);
-                else if(!strcmp(type, "CO")) {
+                else if (!strcmp(type, "CO")) {
                     accessory = new Accessory(eAccessoryEffectType::COURAGE);
-                    mMap->GetPlayer()->SetCourageBuff();
+                    // mMap->GetPlayer()->SetCourageBuff();
                 }
-                else if(!strcmp(type, "EX"))
+                else if (!strcmp(type, "EX"))
                     accessory = new Accessory(eAccessoryEffectType::EXPERIENCE);
-                else if(!strcmp(type, "DX"))
+                else if (!strcmp(type, "DX"))
                     accessory = new Accessory(eAccessoryEffectType::DEXTERITY);
-                else if(!strcmp(type, "HU")) {
+                else if (!strcmp(type, "HU")) {
                     accessory = new Accessory(eAccessoryEffectType::HUNTER);
-                    mMap->GetPlayer()->SetHunterBuff();
+                    // mMap->GetPlayer()->SetHunterBuff();
                 }
-                else if(!strcmp(type, "CU"))
+                else if (!strcmp(type, "CU"))
                     accessory = new Accessory(eAccessoryEffectType::CURSED);
-                break;
                 mMap->Spawn(new EquipmentBox(x, y, accessory));
+                break;
+            }
             default:
                 assert(false);
             }
@@ -128,30 +130,29 @@ namespace rpg_extreme{
             int cnt = mMap->GetGameObjectCount(x, y);
             if (cnt >= 2)
             {
-                for(int idx = 0; idx < cnt; idx++) {
-                    GameObject *gameObject = mMap->GetGameObject(x, y, idx);
-                    if(gameObject->GetSymbol() == eSymbolType::PLAYER) 
-                        continue;
-                    switch(gameObject->GetSymbol()) {
-                    case eSymbolType::MONSTER:
-                        battleWithMonster(static_cast<Monster*>(gameObject));
-                        break;
-                    case eSymbolType::BOSS_MONSTER:
-                        battleWithBossMonster(static_cast<BossMonster*>(gameObject));
-                        break;
-                    case eSymbolType::SPIKE_TRAP:
-                        stepOnSpikeTrap(static_cast<SpikeTrap*>(gameObject));
-                        break;
-                    case eSymbolType::ITEM_BOX:
-                        openEquipmentBox(static_cast<EquipmentBox*>(gameObject));
-                        break;
-                    }
+                GameObject *gameObject = mMap->GetGameObject(x, y, 0);
+                switch(gameObject->GetSymbol()) {
+                case eSymbolType::MONSTER:
+                    battleWithMonster(static_cast<Monster*>(gameObject));
+                    break;
+                case eSymbolType::BOSS_MONSTER:
+                    battleWithBossMonster(static_cast<BossMonster*>(gameObject));
+                    if (mPlayerKillerName != "" || mbGameClear) return;
+                    break;
+                case eSymbolType::SPIKE_TRAP:
+                    stepOnSpikeTrap(static_cast<SpikeTrap*>(gameObject));
+                    break;
+                case eSymbolType::ITEM_BOX:
+                    openEquipmentBox(static_cast<EquipmentBox*>(gameObject));
+                    break;
                 }
+                if (!player->IsAlive()) return;
             }
         }
+        mTurnCount--;
     }
 
-    void Game::Shudown() {
+    void Game::Shutdown() {
         delete sInstance;
     }
 
@@ -170,20 +171,30 @@ namespace rpg_extreme{
         //TODO: HUNTER 장신구 효과 활성화
         bool isHunter = player->HasAccessoryEffect(eAccessoryEffectType::HUNTER);
         bool isCourage = player->HasAccessoryEffect(eAccessoryEffectType::COURAGE);
-        if(isHunter) {
-            player->FillUpHp();
-            player->AttackTo(bossMonster);
-        }
-        while(!player->IsAlive() || !bossMonster->IsAlive()) {
+        bool isDex = player->HasAccessoryEffect(eAccessoryEffectType::DEXTERITY);
+        while(player->IsAlive() && bossMonster->IsAlive()) {
             if(isCourage) {
                 //TODO: COURAGE 처리
-                player->AttackTo(bossMonster);
                 player->SetCourageBuff();
+                if (isHunter) player->FillUpHp();
+                if (isDex) {
+                    player->SetHunterBuff();
+                    player->AttackTo(bossMonster);
+                    
+                    player->SetHunterBuff();
+                }
+                else 
+                    player->AttackTo(bossMonster);
+
                 isCourage = false;
-                if (!player->IsAlive() || !bossMonster->IsAlive())
-                    break;
+                player->SetCourageBuff();
+                if (!bossMonster->IsAlive()) break;
+                if (!isHunter) player->OnAttacked(bossMonster, bossMonster->GetAttack());
+                if (!player->IsAlive()) break;
             }
             player->AttackTo(bossMonster);
+            if (!(bossMonster->IsAlive()))
+                break;
             player->OnAttacked(bossMonster, bossMonster->GetAttack());
         }
         if(player->IsAlive()) {
@@ -195,18 +206,22 @@ namespace rpg_extreme{
             if(player->HasAccessoryEffect(eAccessoryEffectType::HP_REGENERATION))
                 player->AddHp(3);
             mMap->Remove(bossMonster);
+            mbGameClear = true;
         }
         else {
             if(player->HasAccessoryEffect(eAccessoryEffectType::REINCARNATION)) {
                 player->MoveTo(player->GetInitX(), player->GetInitY());
+                player->FillUpHp();
                 player->UnequipReincarnationAccessory();
                 bossMonster->FillUpHp();
+                
             }
             else {
-                mMap->Remove(player);
-                Game::GetInstance().Shudown();
+                mPlayerKillerName = bossMonster->GetName();
+                //mMap->Remove(player);
             } 
         }
+        //Game::GetInstance().Shudown();
     }
 
     void Game::battleWithMonster(Monster* const monster) {
@@ -215,19 +230,30 @@ namespace rpg_extreme{
             battleWithBossMonster(static_cast<BossMonster*>(monster));
         else {
             bool isCourage = player->HasAccessoryEffect(eAccessoryEffectType::COURAGE);
-            while(!player->IsAlive() || !monster->IsAlive()) {
+            bool isDex = player->HasAccessoryEffect(eAccessoryEffectType::DEXTERITY);
+            while(player->IsAlive() && monster->IsAlive()) {
                 if(isCourage) {
-                    player->AttackTo(monster);
                     player->SetCourageBuff();
+                    if (isDex) {
+                        player->SetHunterBuff();
+                        player->AttackTo(monster);
+                        player->SetHunterBuff();
+                    }
+                    else
+                        player->AttackTo(monster);
+                    
                     isCourage = false;
-                    if(!player->IsAlive() || !monster->IsAlive())
-                        break;
+                    player->SetCourageBuff();
+                    if (!monster->IsAlive()) break;
+                    player->OnAttacked(monster, monster->GetAttack());
+                    if(!player->IsAlive()) break;
+
                 }
                 player->AttackTo(monster);
+                if (!(monster->IsAlive()))
+                    break;
                 player->OnAttacked(monster, monster->GetAttack());
             }
-            if(player->HasAccessoryEffect(eAccessoryEffectType::COURAGE))
-                player->SetCourageBuff();
         }
         if(player->IsAlive()) {
             //TODO: HP Regeneration, Experience 장신구 효과 활성화
@@ -245,11 +271,13 @@ namespace rpg_extreme{
             if (player->HasAccessoryEffect(eAccessoryEffectType::REINCARNATION)) {
                 player->MoveTo(player->GetInitX(), player->GetInitY());
                 player->UnequipReincarnationAccessory();
+                player->FillUpHp();
                 monster->FillUpHp();
             }
             else {
-                mMap->Remove(player);
-                Game::GetInstance().Shudown();
+                //mMap->Remove(player);
+                //Game::GetInstance().Shudown();
+                mPlayerKillerName = monster->GetName();
             }
         }
     }
@@ -271,6 +299,7 @@ namespace rpg_extreme{
         }
         else
             assert(false);
+        mMap->Remove(equipmentBox);
     }
 
     void Game::stepOnSpikeTrap(SpikeTrap* const spikeTrap) {
@@ -280,17 +309,28 @@ namespace rpg_extreme{
             player->OnAttacked(spikeTrap, 1);
         else
             player->OnAttacked(spikeTrap, 5);
+        if (!player->IsAlive()) {
+            if (player->HasAccessoryEffect(eAccessoryEffectType::REINCARNATION)) {
+                player->MoveTo(player->GetInitX(), player->GetInitY());
+                player->UnequipReincarnationAccessory();
+                player->FillUpHp();
+            }
+            else 
+                mPlayerKillerName = "SPIKE TRAP";
+        }
+            
     }
 
     std::string Game::GetResultToString() const {
         std::stringstream ss;
 
         Player *player = mMap->GetPlayer();
-
+        int16_t hp = player->GetHp();
+        if (hp < 0) hp = 0;
         ss << mMap->ToString();
-        ss << "Passed Turns : " << mTurnCount << '\n';
+        ss << "Passed Turns : " << mTurnCount + 1 << '\n';
         ss << "LV : " << player->GetLevel() << '\n';
-        ss << "HP : " << player->GetHp() << '/' << player->GetMaxHp() << '\n';
+        ss << "HP : " << hp << '/' << player->GetMaxHp() << '\n';
         ss << "ATT : " << player->GetAttack() << '+' << player->GetWeaponAttack() << '\n';
         ss << "DEF : " << player->GetDefense() << '+' << player->GetArmorDefense() << '\n';
         ss << "EXP : " << player->GetExp() << '/' << player->GetMaxExp() << '\n';
