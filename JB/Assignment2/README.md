@@ -1,4 +1,4 @@
-## BOJ RPG Extreme(17081)
+## BOJ RPG Extreme(17081) <img src="https://img.shields.io/badge/status-WA 60percent-red" align = "center"/>
 
 [BOJ RPG Extreme](http://boj.kr/17081)을 [ALPS Study template](https://docs.google.com/document/d/1vFFCBOfaOMzsaDddDEIGZaMoj_B42tD8t6DdUCdrOS0/edit#)에 따라 구현
 
