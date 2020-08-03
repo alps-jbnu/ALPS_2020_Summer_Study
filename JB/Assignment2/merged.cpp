@@ -919,7 +919,7 @@ namespace rpg_extreme
             switch(gameObject->GetSymbol()) {
             case eSymbolType::BOSS_MONSTER:
             {
-                BossMonster* bossMonster = dynamic_cast<BossMonster*>(gameObject);
+                BossMonster* bossMonster = static_cast<BossMonster*>(gameObject);
                 if (bossMonster) {
                     bossMonster->FillUpHp();
                     mGameObjects[bossMonster->GetY()][bossMonster->GetX()].push_back(bossMonster);
@@ -928,7 +928,7 @@ namespace rpg_extreme
             }
             case eSymbolType::MONSTER:
             {
-                Monster* monster = dynamic_cast<Monster*>(gameObject);
+                Monster* monster = static_cast<Monster*>(gameObject);
                 if (monster) {
                     monster->FillUpHp();
                     mGameObjects[monster->GetY()][monster->GetX()].push_back(monster);
@@ -936,7 +936,7 @@ namespace rpg_extreme
                 break;
             }
             case eSymbolType::PLAYER:
-                Player* player = dynamic_cast<Player *>(gameObject);
+                Player* player = static_cast<Player *>(gameObject);
                 if(player) {
                     //player->FillUpHp();
                     mGameObjects[player->GetY()][player->GetX()].push_back(player);
@@ -945,7 +945,7 @@ namespace rpg_extreme
             }
         }
         else if (gameObject->GetSymbol() == eSymbolType::ITEM_BOX) { // Character가 아닌 case
-            EquipmentBox *equipmentBox = dynamic_cast<EquipmentBox *>(gameObject);
+            EquipmentBox *equipmentBox = static_cast<EquipmentBox *>(gameObject);
             if (equipmentBox)
                 mGameObjects[equipmentBox->GetY()][equipmentBox->GetX()].push_back(equipmentBox);
         }
