@@ -24,7 +24,8 @@
 | 7/8 | 스택 | [오아시스 재결합](https://www.acmicpc.net/problem/3015) | [탑](https://www.acmicpc.net/problem/2493), [괄호의 값](https://www.acmicpc.net/problem/2504), [천재 수학자 성필](https://www.acmicpc.net/problem/15815) | [균형잡힌 세상](https://www.acmicpc.net/problem/4949), [최소, 최대](https://www.acmicpc.net/problem/10818) |
 | 7/15 | 큐 | [가운데를 말해요](https://www.acmicpc.net/problem/1655) | [좋은 친구](https://www.acmicpc.net/problem/3078), [프린터 큐](https://www.acmicpc.net/problem/1966), [AC](https://www.acmicpc.net/problem/5430) | [회전하는 큐](https://www.acmicpc.net/problem/1021), [덱](https://www.acmicpc.net/problem/10866) |
 | 7/22 | 그리디 | [과제](https://www.acmicpc.net/problem/13904), [저울](https://www.acmicpc.net/problem/2437) | [체육복](https://programmers.co.kr/learn/courses/30/lessons/42862), [강의실 배정](https://www.acmicpc.net/problem/11000) | [캠핑](https://www.acmicpc.net/problem/4796), [거스름돈](https://www.acmicpc.net/problem/5585) |
-| 7/29 | 완전탐색 | [테트로미노](https://www.acmicpc.net/problem/14500), [가르침](https://www.acmicpc.net/problem/1062) | [숫자 야구](https://www.acmicpc.net/problem/2503), [사탕 게임](https://www.acmicpc.net/problem/3085) | [일곱 난쟁이](https://www.acmicpc.net/problem/2309), [모의고사](https://programmers.co.kr/learn/courses/30/lessons/42840)
+| 7/29 | 완전 탐색 | [테트로미노](https://www.acmicpc.net/problem/14500), [가르침](https://www.acmicpc.net/problem/1062) | [숫자 야구](https://www.acmicpc.net/problem/2503), [사탕 게임](https://www.acmicpc.net/problem/3085) | [일곱 난쟁이](https://www.acmicpc.net/problem/2309), [모의고사](https://programmers.co.kr/learn/courses/30/lessons/42840)
+| 8/5 | 이분 탐색 | [합이 0인 네 정수](http://boj.kr/7453), [도토리 숨기기](http://boj.kr/15732) | [보석상자](http://boj.kr/2792), [예산](http://boj.kr/2512), [나무 자르기](http://boj.kr/2805), [공유기 설치](http://boj.kr/2110) | (없음)
 
 
 [숙제1](https://docs.google.com/document/d/1S7tdaAIsUO7eRL0aLghEnbJUKpz8bZPqbodfmdxuQCk/edit#) : 7월 8일 ~ 7월 21일  
