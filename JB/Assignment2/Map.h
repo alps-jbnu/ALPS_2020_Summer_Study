@@ -8,7 +8,7 @@
 
 #include "GameObject.h"
 #include "Player.h"
-#include "Monster.h"
+#include "BossMonster.h"
 #include "EquipmentBox.h"
 #include "SpikeTrap.h"
 #include "eSymbolType.h"

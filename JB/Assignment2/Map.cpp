@@ -19,23 +19,20 @@ namespace rpg_extreme
                 std::vector<GameObject *> objVector;
                 switch (symbol)
                 {
-                    //TODO: 입력
                 case eSymbolType::BLANK:
-                    //objVector.push_back(new GameObject(x, y));
+                    // objVector.push_back(new GameObject(x, y));
                     break;
                 case eSymbolType::WALL:
-                    // objVector.push_back(new Wall())
+                    objVector.push_back(new Wall(x, y));
                     break;
                 case eSymbolType::ITEM_BOX:
-                    // objVector.push_back(new Item())
                     mItemBoxCount++;
                     break;
                 case eSymbolType::SPIKE_TRAP:
-                    // objVector.push_back(new Spike())
+                    objVector.push_back(new SpikeTrap(x, y));
                     break;
                 case eSymbolType::MONSTER:
                     mMonsterCount++;
-                    objVector.push_back(new Monster(x, y, "", 0, 0, 0, 0));
                     break;
                 case eSymbolType::BOSS_MONSTER:
                     mMonsterCount++;
@@ -43,7 +40,8 @@ namespace rpg_extreme
                     mBossMonsterPosX = x;
                     break;
                 case eSymbolType::PLAYER:
-                    objVector.push_back(new Player::Player(x, y));
+                    mPlayer = new Player(x, y);
+                    objVector.push_back(mPlayer);
                     break;
                 default:
                     assert(false);
@@ -79,55 +77,71 @@ namespace rpg_extreme
         //TODO: mGameObjects에 gameObject를 추가합니다.
         if(gameObject->IsCharacter()) {
             switch(gameObject->GetSymbol()) {
+            case eSymbolType::BOSS_MONSTER:
+            {
+                BossMonster* bossMonster = dynamic_cast<BossMonster*>(gameObject);
+                if (bossMonster) {
+                    bossMonster->FillUpHp();
+                    mGameObjects[bossMonster->GetY()][bossMonster->GetX()].push_back(bossMonster);
+                }
+                break;
+            }
             case eSymbolType::MONSTER:
-                Monster* monster = dynamic_cast<Monster *>(gameObject);
-                if(monster)
+            {
+                Monster* monster = dynamic_cast<Monster*>(gameObject);
+                if (monster) {
                     monster->FillUpHp();
                     mGameObjects[monster->GetY()][monster->GetX()].push_back(monster);
+                }
                 break;
-            case eSymbolType::BOSS_MONSTER:
-                //TODO: BOSS MONSTER 정의 후
-                break;
+            }
             case eSymbolType::PLAYER:
                 Player* player = dynamic_cast<Player *>(gameObject);
                 if(player) {
-                    player->FillUpHp();
-                    mGameObjects[player->GetInitY()][player->GetInitX()].push_back(player);
+                    //player->FillUpHp();
+                    mGameObjects[player->GetY()][player->GetX()].push_back(player);
                 }
                 break;
             }
         }
-        else { // Character가 아닌 case
-            assert(false);
+        else if (gameObject->GetSymbol() == eSymbolType::ITEM_BOX) { // Character가 아닌 case
+            EquipmentBox *equipmentBox = dynamic_cast<EquipmentBox *>(gameObject);
+            if (equipmentBox)
+                mGameObjects[equipmentBox->GetY()][equipmentBox->GetX()].push_back(equipmentBox);
         }
+        
     }
 
     bool Map::Remove(GameObject* const gameObject) {
-        for(auto fitr = mGameObjects.begin(); fitr != mGameObjects.end(); fitr++) {
-            for(auto sitr = (*fitr).begin(); sitr != (*fitr).end(); sitr++) {
-                if()
+        auto& objects = mGameObjects[gameObject->GetY()][gameObject->GetX()];
+        for (auto itr = objects.begin(); itr != objects.end(); itr++)
+        {
+            if(gameObject == *itr){
+                objects.erase(itr);
+                return true;
             }
         }
         return false;
     }
 
     size_t Map::GetGameObjectCount(const int8_t x, const int8_t y) const {
-        return 0;
+        return mGameObjects[y][x].size();
     }
 
     GameObject* Map::GetGameObject(const int8_t x, const int8_t y, const uint8_t index) const{
-        return nullptr;
+        return mGameObjects[y][x][index];
     }
 
     bool Map::IsPassable(const int8_t x, const int8_t y) const {
-        if(x > mWidth || x < 1 || y > mHeight || y < 1) return false;
-        // TODO: 이동하려는 위치가 맵에서 접근이 가능한지 여부 확인 필요(벽인지)
-        // else if ()
+        if(x >= mWidth || x < 0 || y >= mHeight || y < 0) return false;
+        for(auto itr : mGameObjects[y][x])
+            if(itr->IsWall())
+                return false;
         return true;
     }
 
     Player* Map::GetPlayer() const {
-        return nullptr;
+        return mPlayer;
     }
 
     std::string Map::ToString() const {
@@ -135,7 +149,12 @@ namespace rpg_extreme
         
         for(int y = 0; y < mHeight; ++y) {
             for(int x = 0; x < mWidth; ++x) {
-                ss << '.';
+                if(mPlayer->GetX() == x && mPlayer->GetY() == y && mPlayer->IsAlive())
+                    ss << '@';
+                else if(mGameObjects[y][x].empty())
+                    ss << '.';
+                else
+                    ss << mGameObjects[y][x][0]->GetSymbol();
             }
             ss << '\n';
         }

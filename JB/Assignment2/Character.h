@@ -29,5 +29,5 @@ namespace rpg_extreme {
         int16_t mAttack;
         int16_t mDefense;
         uint16_t mExp;
-    }
+    };
 }
