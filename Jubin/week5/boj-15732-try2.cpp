@@ -30,7 +30,7 @@ int main()
 	int low = 1;
 	int high = N;
 	
-	while (low + 1 < high)
+	while (low <= high)
 	{
 		int mid = (low + high) / 2;
 		long long count = 0;
@@ -50,15 +50,15 @@ int main()
 		
 		if (count >= D)
 		{
-			high = mid;
+			high = mid - 1;
 		}
 		else
 		{
-			low = mid;
+			low = mid + 1;
 		}
 	}
 	
-	cout << high;
+	cout << high + 1;
 
 	return 0;
 }
