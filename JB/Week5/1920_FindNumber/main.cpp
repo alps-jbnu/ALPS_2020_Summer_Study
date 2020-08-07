@@ -4,7 +4,7 @@ int N, M;
 vector<int> v(100001);
 
 bool binarySearch(int begin, int end, int target) {
-    while(begin < end) {
+    while(begin <= end)   {
         int mid = (end + begin) / 2;
         if (v[mid] == target) return true;
         else if (v[mid] < target)
