@@ -16,8 +16,8 @@ bool binarySearch(int begin, int end, int target) {
 }
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
+    // ios::sync_with_stdio(false);
+    // cin.tie(0);
 
     cin >> N;
     int input;
