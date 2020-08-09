@@ -1,24 +1,26 @@
 #include <bits/stdc++.h>
+#define ll long long
 using namespace std;
-vector<int> v(1000001);
-int N, M, ans = 987654321;
+vector<ll> v(1000001);
+ll N, M, ans;
 
 int binarySearch(int begin, int end) {
-    while(begin <= end) {
-        int mid = (begin + end) / 2, sum = 0;
+    ll mid, sum;
+    while (begin <= end) {
+        mid = (begin + end) / 2, sum = 0;
         for(int i = 0; i < N; i++) {
             if(v[i] > mid)
                 sum += (v[i] - mid);
         }
-        if(sum == M) {
-            ans = min(ans, mid);
-            begin += 2;
-        }
-        else if (sum < M)
+        if(sum < M) {
             end = mid - 1;
-        else
+        }
+        else{
+            ans = mid;
             begin = mid + 1;
+        }
     }
+    // if (begin == end) return begin;
     return ans;
 }
 
@@ -28,5 +30,5 @@ int main() {
     cin >> N >> M;
     for(int i = 0; i < N; i++)
         cin >> v[i];
-    cout << binarySearch(1, 1000001);
+    cout << binarySearch(1, 1000000001);
 }
