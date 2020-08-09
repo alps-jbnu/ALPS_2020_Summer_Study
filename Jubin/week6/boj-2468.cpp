@@ -35,8 +35,7 @@ int main()
 	char maxHeight = 0;
 	char heights[SIZE][SIZE];
 	
-	const int ox[] = {0, 0, 1, -1};
-	const int oy[] = {1, -1, 0, 0};
+	const int offset[] = {0, 0, 1, -1};
 	
 	scanf("%d", &N);
 	
@@ -79,8 +78,8 @@ int main()
 				
 				for (int i = 0; i < 4; ++i)
 				{
-					int nx = x + ox[i];
-					int ny = y + oy[i];
+					int nx = x + offset[i];
+					int ny = y + offset[3 - i];
 					
 					if (!IsValid(nx, ny))
 					{
