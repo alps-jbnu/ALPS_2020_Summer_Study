@@ -9,23 +9,26 @@ enum
 };
 
 int N;
-int adj[MAX];
 int cnt;
+int adj[MAX];
 bool visited[MAX];
 bool escaped[MAX];
 
 void dfs(int cur)
 {
     visited[cur] = true;
+    
     int next = adj[cur];
     if (visited[next])
     {
         if (!escaped[next])
         {
-            for (int temp = next; temp != cur; temp = adj[temp])
-            {
-                cnt++;
-            }
+        	int temp = next;
+        	while (temp != cur)
+        	{
+        		temp = adj[temp];
+        		++cnt;
+			}
             cnt++;
         }
     }
