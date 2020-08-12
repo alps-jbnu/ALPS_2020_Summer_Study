@@ -5,73 +5,67 @@ using namespace std;
 
 enum
 {
-	MAX = 100001
+    MAX = 100001
 };
 
-int cycleCount;
+int N;
+int adj[MAX];
+int cnt;
+bool visited[MAX];
+bool escaped[MAX];
 
-void dfs(int cur, const int* adj, bool* visited, bool* escaped)
+void dfs(int cur)
 {
-	visited[cur] = true;
+    visited[cur] = true;
+    int next = adj[cur];
+    if (visited[next])
+    {
+        if (!escaped[next])
+        {
+            for (int temp = next; temp != cur; temp = adj[temp])
+            {
+                cnt++;
+            }
+            cnt++;
+        }
+    }
+    else
+    {
+        dfs(next);
+    }
 
-	int next = adj[cur];
-
-	if (visited[next])
-	{
-		if (!escaped[next])
-		{
-			for (int temp = cur; temp != next; temp = adj[temp])
-			{
-				++cycleCount;
-			}
-			//++cycleCount;
-		}
-	}
-	else
-	{
-		dfs(next, adj, visited, escaped);
-	}
-
-	escaped[next] = true;
+    escaped[cur] = true;
 }
 
 int main()
 {
-	ios::sync_with_stdio(false);
-	cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
 
-	int T;
-	int adj[MAX];
-	bool visited[MAX];
-	bool escaped[MAX];
+    int T;
+    cin >> T;
 
-	cin >> T;
+    while (T--)
+    {
+        cin >> N;
+        for (int i = 1; i <= N; i++)
+        {
+            cin >> adj[i];
+        }
 
-	while (T--)
-	{
-		int N;
-		cin >> N;
+        memset(visited + 1, false, N);
+        memset(escaped + 1, false, N);
 
-		memset(visited, false, MAX);
-		memset(escaped, false, MAX);
+        cnt = 0;
 
-		for (int u = 1; u <= N; ++u)
-		{
-			cin >> adj[u];
-		}
+        for (int i = 1; i <= N; i++)
+        {
+            if (!visited[i])
+            {
+                dfs(i);
+            }
+        }
 
-		cycleCount = 0;
-
-		for (int i = 1; i <= N; ++i)
-		{
-			if (!visited[i])
-			{
-				dfs(i, adj, visited, escaped);
-			}
-		}
-
-		cout << N - cycleCount << '\n';
-	}
-
-	return 0;
+        cout << N - cnt << '\n';
+    }
 }
