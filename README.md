@@ -27,6 +27,8 @@
 | 7/29 | 완전 탐색 | [테트로미노](https://www.acmicpc.net/problem/14500), [가르침](https://www.acmicpc.net/problem/1062) | [숫자 야구](https://www.acmicpc.net/problem/2503), [사탕 게임](https://www.acmicpc.net/problem/3085) | [일곱 난쟁이](https://www.acmicpc.net/problem/2309), [모의고사](https://programmers.co.kr/learn/courses/30/lessons/42840)
 | 8/5 | 이분 탐색 | [합이 0인 네 정수](http://boj.kr/7453), [도토리 숨기기](http://boj.kr/15732) | [보석상자](http://boj.kr/2792), [예산](http://boj.kr/2512), [나무 자르기](http://boj.kr/2805), [공유기 설치](http://boj.kr/2110) | [수 찾기](http://boj.kr/1920) |
 | 8/12 | DFS | [달이 차오른다, 가자.](https://www.acmicpc.net/problem/1194), [텀 프로젝트](https://www.acmicpc.net/problem/9466)   | [빙산](https://www.acmicpc.net/problem/2573), [단어 변환](https://programmers.co.kr/learn/courses/30/lessons/43163)  | [유기농 배추](https://www.acmicpc.net/problem/1012), [안전 영역](https://www.acmicpc.net/problem/2468)   |
+| 8/19 | BFS | [벽 부수고 이동하기](https://www.acmicpc.net/problem/2206), [로봇 청소기](https://www.acmicpc.net/problem/4991) | [공주님을 구해라!](https://www.acmicpc.net/problem/17836), [스타트링크](https://www.acmicpc.net/problem/5014) | [DFS와 BFS](https://www.acmicpc.net/problem/1260), [유기농 배추](https://www.acmicpc.net/problem/1012) |
+
 
 
 
