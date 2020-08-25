@@ -39,18 +39,18 @@ int compute(int x)
 
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+
 	int x;
 	cin >> x;
-	
-    for (int i = 1; i <= x; ++i)
-    {
-    	dp[i] = -1;
+
+	for (int i = 1; i <= x; ++i)
+	{
+		dp[i] = -1;
 	}
-	
+
 	cout << compute(x);
-	
+
 	return 0;
 }

@@ -13,15 +13,15 @@ int dp[MAX];
 
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+
 	int x;
 	cin >> x;
-    
-    for (int i = 1; i <= x; ++i)
-    {
-    	dp[i] = INT_MAX;
+
+	for (int i = 1; i <= x; ++i)
+	{
+		dp[i] = INT_MAX;
 	}
 
 	dp[1] = 0;
@@ -37,8 +37,8 @@ int main()
 			dp[i * 3] = min(dp[i * 3], dp[i] + 1);
 		}
 	}
-	
+
 	cout << dp[x];
-	
+
 	return 0;
 }
