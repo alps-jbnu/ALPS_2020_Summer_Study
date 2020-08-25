@@ -4,33 +4,33 @@ using namespace std;
 
 enum
 {
-	MAX = 100001
+	RANGE_OUT = 100001
 };
 
 int N;
 int K;
 int coins[100];
-int dp[101][10001];
+int dp[100 + 1][10000 + 1];
 
-int topdown(int i, int p)
+int topdown(int i, int amount)
 {
 	if (i == N)
 	{
-		return (p == 0 ? 0 : MAX);
+		return (amount == 0 ? 0 : RANGE_OUT);
 	}
-	if (dp[i][p] != -1)
+	if (dp[i][amount] != -1)
 	{
-		return dp[i][p];
+		return dp[i][amount];
 	}
 	
-	int result = topdown(i + 1, p);
-	if (p >= coins[i])
+	int result = topdown(i + 1, amount);
+	if (amount >= coins[i])
 	{
-		result = min(result, topdown(i, p - coins[i]) + 1);
+		result = min(result, topdown(i, amount - coins[i]) + 1);
 	}
-	dp[i][p] = result;
+	dp[i][amount] = result;
 	
-	return dp[i][p];
+	return dp[i][amount];
 }
 
 int main()
@@ -53,7 +53,7 @@ int main()
 	}
 	
 	int count = topdown(0, K);
-	if (count == MAX)
+	if (count == RANGE_OUT)
 	{
 		count = -1;
 	}

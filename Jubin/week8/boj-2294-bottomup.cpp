@@ -4,7 +4,7 @@ using namespace std;
 
 enum
 {
-	MAX = 100001
+	RANGE_OUT = 100001
 };
 
 int N;
@@ -23,9 +23,9 @@ int main()
 		cin >> coins[i];
 	}
 	
-	for (int i = 1; i < MAX; ++i)
+	for (int i = 1; i < RANGE_OUT; ++i)
 	{
-		dp[i] = MAX;
+		dp[i] = RANGE_OUT;
 	}
 
 	for (int i = 0; i < N; ++i)
@@ -38,7 +38,7 @@ int main()
 		}
 	}
 	
-	if (dp[K] == MAX)
+	if (dp[K] == RANGE_OUT)
 	{
 		dp[K] = -1;
 	}
